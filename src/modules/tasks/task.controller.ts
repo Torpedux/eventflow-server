@@ -13,6 +13,10 @@ const statusSchema = z.object({
   status: z.nativeEnum(TaskStatus),
 });
 
+const assignSchema = z.object({
+  userId: z.string().uuid(),
+});
+
 export async function listTasksHandler(req: AuthRequest, res: Response) {
   const projectId = req.params.projectId as string;
   const statusQuery = req.query.status as TaskStatus | undefined;
@@ -52,5 +56,13 @@ export async function updateTaskStatusHandler(req: AuthRequest, res: Response) {
   const projectId = req.params.projectId as string;
   const taskId = req.params.taskId as string;
   const task = await taskService.updateTaskStatus(req.userId!, projectId, taskId, data.status);
+  res.json(task);
+}
+
+export async function assignTaskHandler(req: AuthRequest, res: Response) {
+  const data = assignSchema.parse(req.body);
+  const projectId = req.params.projectId as string;
+  const taskId = req.params.taskId as string;
+  const task = await taskService.assignTask(req.userId!, projectId, taskId, data.userId);
   res.json(task);
 }

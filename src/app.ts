@@ -1,3 +1,4 @@
+import { participantRouter } from "./modules/participants/participant.routes";
 import { taskRouter } from "./modules/tasks/task.routes";
 import { authMiddleware } from "./middleware/auth.middleware";
 import { projectRouter } from "./modules/projects/project.routes";
@@ -17,4 +18,5 @@ app.get("/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/auth", authRouter);
 app.use("/api/projects", authMiddleware, projectRouter);
 app.use("/api/projects/:projectId/tasks", authMiddleware, taskRouter);
+app.use("/api/projects/:projectId/participants", authMiddleware, participantRouter);
 app.use(errorHandler);

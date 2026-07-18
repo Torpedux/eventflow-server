@@ -83,3 +83,25 @@ export async function updateTaskStatus(
     data: { status },
   });
 }
+
+export async function assignTask(
+  userId: string,
+  projectId: string,
+  taskId: string,
+  assignedUserId: string
+) {
+  const project = await assertProjectAccess(userId, projectId);
+  await getTaskOrThrow(projectId, taskId);
+
+  // L'utilisateur assigne doit etre owner ou participant du projet
+  const isOwner = project.ownerId === assignedUserId;
+  const isParticipant = project.participants.some((p) => p.userId === assignedUserId);
+  if (!isOwner && !isParticipant) {
+    throw new AppError(400, "Cet utilisateur n'est pas participant de l'événement");
+  }
+
+  return prisma.task.update({
+    where: { id: taskId },
+    data: { assignedUserId },
+  });
+}
