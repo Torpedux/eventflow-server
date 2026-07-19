@@ -88,10 +88,18 @@ export async function assignTask(
   userId: string,
   projectId: string,
   taskId: string,
-  assignedUserId: string
+  assignedUserId: string | null
 ) {
   const project = await assertProjectAccess(userId, projectId);
   await getTaskOrThrow(projectId, taskId);
+
+  // Desassignation : pas de verification de participant necessaire
+  if (assignedUserId === null) {
+    return prisma.task.update({
+      where: { id: taskId },
+      data: { assignedUserId: null },
+    });
+  }
 
   // L'utilisateur assigne doit etre owner ou participant du projet
   const isOwner = project.ownerId === assignedUserId;

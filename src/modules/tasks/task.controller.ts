@@ -10,11 +10,11 @@ const taskSchema = z.object({
 });
 
 const statusSchema = z.object({
-  status: z.nativeEnum(TaskStatus),
+  status: z.enum(TaskStatus),
 });
 
 const assignSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.uuid().nullable(),
 });
 
 export async function listTasksHandler(req: AuthRequest, res: Response) {
