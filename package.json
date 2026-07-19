@@ -23,6 +23,9 @@
     "url": "https://github.com/Torpedux/eventflow-server/issues"
   },
   "homepage": "https://github.com/Torpedux/eventflow-server#readme",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "bcrypt": "^6.0.0",
